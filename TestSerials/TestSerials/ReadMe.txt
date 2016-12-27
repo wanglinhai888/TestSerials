@@ -1,30 +1,87 @@
 ﻿========================================================================
-    控制台应用程序：TestSerials 项目概述
+   TestSerials 项目概述
 ========================================================================
+参考博客网址：
 
-应用程序向导已为您创建了此 TestSerials 应用程序。
+使用示例：
+#include <iostream>
+#include "Serialize.h"
 
-本文件概要介绍组成 TestSerials 应用程序的每个文件的内容。
+using namespace std;
+struct MyStruct
+{
+public:
+	void toString(string &str)
+	{
+		CSerial serial;
+		serial << a << b << _char << str1 << vec_ini << vec_vec_int;
+		str = serial.buffer();
+	}
+
+	void unString(const string &str)
+	{
+		CSerial serial(str);
+		serial >> a >> b >> _char >> str1 >> vec_ini >> vec_vec_int;
+	}
+
+	//打印
+	void print()
+	{
+		cout << "-----------------------------------------" << endl;
+		cout << "a:" << a << endl;
+		cout << "b:" << b << endl;
+		cout << "_char: " << _char << endl;
+		cout << "str: " << str1 << endl;
+		cout << "vec_ini" << endl;
+		for ( auto i = vec_ini.begin(); i != vec_ini.end(); i++ )
+		{
+			cout << *i << endl;
+		}
+		cout << "vec_vec_int " << endl;
+		for each ( auto var in vec_vec_int )
+		{
+			for each ( auto i in var )
+			{
+				cout << i << endl;
+			}
+		}
+	    cout << "-----------------------------------------"<<endl;
+        
+	}
+public:
+	int a;
+	int b;
+	char  _char;
+	string str1 ;
+	vector<int> vec_ini;
+	vector<vector<int>> vec_vec_int;
+};
 
 
-TestSerials.vcxproj
-    这是使用应用程序向导生成的 VC++ 项目的主项目文件，其中包含生成该文件的 Visual C++ 的版本信息，以及有关使用应用程序向导选择的平台、配置和项目功能的信息。
+int _tmain(int argc, _TCHAR* argv[])
+{
 
-TestSerials.vcxproj.filters
-    这是使用“应用程序向导”生成的 VC++ 项目筛选器文件。它包含有关项目文件与筛选器之间的关联信息。在 IDE 中，通过这种关联，在特定节点下以分组形式显示具有相似扩展名的文件。例如，“.cpp”文件与“源文件”筛选器关联。
+	MyStruct test;
+	test.a = 1;
+	test.b = 2;
+	test._char = 'c';
+	test.str1 = "fafafasf";
+	test.vec_ini.push_back(1);
+	test.vec_ini.push_back(2);
+	test.vec_vec_int.push_back(test.vec_ini);
+	test.vec_vec_int.push_back(test.vec_ini);
+	test.print();
+	string str;
+	test.toString(str);
 
-TestSerials.cpp
-    这是主应用程序源文件。
+//--------------------------------------------------------------------------------------------
+	MyStruct test1;
+	test1.unString(str);
+	test1.print();
+	getchar();
+	return 0; 
+}
 
-/////////////////////////////////////////////////////////////////////////////
-其他标准文件:
 
-StdAfx.h, StdAfx.cpp
-    这些文件用于生成名为 TestSerials.pch 的预编译头 (PCH) 文件和名为 StdAfx.obj 的预编译类型文件。
-
-/////////////////////////////////////////////////////////////////////////////
-其他注释:
-
-应用程序向导使用“TODO:”注释来指示应添加或自定义的源代码部分。
 
 /////////////////////////////////////////////////////////////////////////////
